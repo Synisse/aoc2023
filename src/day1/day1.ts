@@ -1,7 +1,7 @@
 import {DAY1_DATA, DAY1_DATA_DUMMY} from './data';
 import {isNil, join, sum} from 'lodash';
 
-const ReplacementStrings: any = {
+const ReplacementStrings: Record<string, string> = {
 	one: '1',
 	two: '2',
 	three: '3',
