@@ -17,6 +17,12 @@ function parseData(aData: string) {
     return aData.split('\n').map(aValue => aValue.replace(' ', ''));
 }
 
+function convertDigit(aDigitAsString: string) {
+    return aDigitAsString.replace(/one|two|three|four|five|six|seven|eight|nine/gi, function(aMatch) {
+        return ReplacementStrings[aMatch];
+    });
+}
+
 export function solveDay1() {
     let parsedData = parseData(DAY1_DATA);
 
@@ -26,15 +32,11 @@ export function solveDay1() {
         let values = [];
 
         if(!isNil(firstDigit)) {
-            values.push(firstDigit[1].replace(/one|two|three|four|five|six|seven|eight|nine/gi, function(aMatch) {
-                return ReplacementStrings[aMatch];
-            }));
+            values.push(convertDigit(firstDigit[1]));
         }
 
         if(!isNil(lastDigit)) {
-            values.push(lastDigit[1].replace(/one|two|three|four|five|six|seven|eight|nine/gi, function(aMatch) {
-                return ReplacementStrings[aMatch];
-            }));
+            values.push(convertDigit(lastDigit[1]));
         }
 
         return parseInt(join(values, ''), 10)
