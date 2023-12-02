@@ -42,6 +42,5 @@ export function solveDay1() {
 		return parseInt(join(values, ''), 10);
 	});
 
-	console.log('FinalData: ', mappedNumberValues);
 	console.log('Solution: ', sum(mappedNumberValues));
 }
