@@ -1,10 +1,15 @@
 import {solveDay1} from './day1/day1';
 import {solveDay2} from './day2/day2';
+import {solveDay3} from './day3/day3';
+
+// console.log('================================');
+// solveDay1();
+// console.log('================================');
+
+// console.log('================================');
+// solveDay2();
+// console.log('================================');
 
 console.log('================================');
-solveDay1();
-console.log('================================');
-
-console.log('================================');
-solveDay2();
+solveDay3();
 console.log('================================');
