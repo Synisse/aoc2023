@@ -40,8 +40,6 @@ function mapInputToPositionData(aArray: (RegExpMatchArray | null)[], aInput: str
 
 export function solveDay3() {
 	let parsedData = parseData(DAY3_DATA);
-	console.log('parsedData: ', parsedData);
-
 	let numbersOfRow = parsedData.map((aRow) => aRow.match(/\d+/g));
 	let charactersOfRow = parsedData.map((aRow) => aRow.match(/[^0-9.]+/g));
 
