@@ -1,5 +1,5 @@
 import {DAY6_DATA, DAY6_DATA_DUMMY} from './data';
-import {chunk, difference, flatten, intersection, join, min, multiply, range, reduce, times, zip} from 'lodash';
+import {join, multiply, reduce, times, zip} from 'lodash';
 
 function parseData(aData: string) {
 	const [time, distance] = aData.split('\n');
@@ -19,29 +19,32 @@ function parseData(aData: string) {
 	};
 }
 
+function calculateWinnableMoves(aTime: number, aDistance: number) {
+	let winnableMoves = 0;
+
+	times(aTime, (aIndex) => {
+		const buttonTime = aIndex;
+		const timeLeftAfterPress = aTime - buttonTime;
+		const distanceTravelled = timeLeftAfterPress * buttonTime;
+		if (distanceTravelled > aDistance) {
+			winnableMoves++;
+		}
+	});
+
+	return winnableMoves;
+}
+
 export function solveDay6() {
 	let parsedData = parseData(DAY6_DATA);
 
-	// part 1
+	// part 1:
 	const preparedGameData = zip(parsedData.time, parsedData.distance);
 
 	const win = preparedGameData.map((aGameEntry) => {
-		console.log('aGameEntry: ', aGameEntry);
 		const time = aGameEntry[0] as number;
 		const distance = aGameEntry[1] as number;
-		let winnableMoves = 0;
 
-		times(time, (aIndex) => {
-			const buttonTime = aIndex;
-			const timeLeftAfterPress = time - buttonTime;
-			const distanceTravelled = timeLeftAfterPress * buttonTime;
-			if (distanceTravelled > distance) {
-				winnableMoves++;
-				console.log(`time: ${buttonTime}, distance: ${distance}, time: ${distanceTravelled}, `);
-			}
-		});
-
-		return winnableMoves;
+		return calculateWinnableMoves(time, distance);
 	});
 
 	console.log('Part 1: ', reduce(win, multiply, 1));
@@ -49,16 +52,6 @@ export function solveDay6() {
 	// part 2:
 	const time = parseInt(join(parsedData.time, ''));
 	const distance = parseInt(join(parsedData.distance, ''));
-	let winnableMoves = 0;
 
-	times(time, (aIndex) => {
-		const buttonTime = aIndex;
-		const timeLeftAfterPress = time - buttonTime;
-		const distanceTravelled = timeLeftAfterPress * buttonTime;
-		if (distanceTravelled > distance) {
-			winnableMoves++;
-		}
-	});
-
-	console.log('Part 2: ', winnableMoves);
+	console.log('Part 2: ', calculateWinnableMoves(time, distance));
 }
