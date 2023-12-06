@@ -22,7 +22,7 @@ function parseData(aData: string) {
 export function solveDay6() {
 	let parsedData = parseData(DAY6_DATA);
 
-	// 1mm per second
+	// part 1
 	const preparedGameData = zip(parsedData.time, parsedData.distance);
 
 	const win = preparedGameData.map((aGameEntry) => {
@@ -45,4 +45,20 @@ export function solveDay6() {
 	});
 
 	console.log('Part 1: ', reduce(win, multiply, 1));
+
+	// part 2:
+	const time = parseInt(join(parsedData.time, ''));
+	const distance = parseInt(join(parsedData.distance, ''));
+	let winnableMoves = 0;
+
+	times(time, (aIndex) => {
+		const buttonTime = aIndex;
+		const timeLeftAfterPress = time - buttonTime;
+		const distanceTravelled = timeLeftAfterPress * buttonTime;
+		if (distanceTravelled > distance) {
+			winnableMoves++;
+		}
+	});
+
+	console.log('Part 2: ', winnableMoves);
 }
