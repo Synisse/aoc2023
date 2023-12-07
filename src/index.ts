@@ -4,6 +4,7 @@ import {solveDay3} from './day3/day3';
 import {solveDay4} from './day4/day4';
 import {solveDay5} from './day5/day5';
 import {solveDay6} from './day6/day6';
+import {solveDay7} from './day7/day7';
 
 // console.log('================================');
 // solveDay1();
@@ -25,6 +26,10 @@ import {solveDay6} from './day6/day6';
 // solveDay5();
 // console.log('================================');
 
+// console.log('================================');
+// solveDay6();
+// console.log('================================');
+
 console.log('================================');
-solveDay6();
+solveDay7();
 console.log('================================');
