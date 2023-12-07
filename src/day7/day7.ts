@@ -1,5 +1,5 @@
 import {DAY7_DATA, DAY7_DATA_DUMMY} from './data';
-import {concat, countBy, groupBy, includes, join, map, multiply, reduce, times, values, zip} from 'lodash';
+import {concat, countBy, filter, groupBy, includes, join, map, multiply, reduce, times, values, zip} from 'lodash';
 
 enum HandValue {
 	FIVE_OF_A_KIND = 6,
@@ -24,6 +24,10 @@ function getCardStringScore(aCardString: string) {
 	return CARD_VALUES.indexOf(aCardString) + 1;
 }
 
+function getCardStringScoreWithJoker(aCardString: string) {
+	return CARD_VALUES_WITH_JOKER.indexOf(aCardString) + 1;
+}
+
 function getHandValue(aHand: number[]): number {
 	if (includes(aHand, 5)) {
 		return HandValue.FIVE_OF_A_KIND;
@@ -42,6 +46,25 @@ function getHandValue(aHand: number[]): number {
 	return HandValue.HIGH_CARD;
 }
 
+function getHandValueWithJokers(aHand: number[], aJokerCount: number): number {
+	const jokers = aJokerCount ? aJokerCount : 0;
+	if (aHand.length === 1 || jokers === 5) {
+		return HandValue.FIVE_OF_A_KIND;
+	} else if (aHand.length === 2 && aHand[0] + jokers === 4) {
+		return HandValue.FOUR_OF_A_KIND;
+	} else if (aHand.length === 2 && aHand[0] + jokers === 3) {
+		return HandValue.FULL_HOUSE;
+	} else if (aHand.length === 3 && aHand[0] + jokers === 3) {
+		return HandValue.THREE_OF_A_KIND;
+	} else if (aHand.length === 3 && aHand[1] + jokers === 2) {
+		return HandValue.TWO_PAIR;
+	} else if (aHand.length === 4) {
+		return HandValue.ONE_PAIR;
+	}
+
+	return HandValue.HIGH_CARD;
+}
+
 function parseData(aData: string): GameHand[] {
 	const data = aData
 		.split('\n')
@@ -49,8 +72,18 @@ function parseData(aData: string): GameHand[] {
 		.map((aCardEntry) => {
 			const hand = aCardEntry[0];
 			const bid = parseInt(aCardEntry[1], 10);
-			const mappedHand = map(countBy(aCardEntry[0]), (aCount) => aCount);
-			const handValue = getHandValue(mappedHand);
+
+			//part1:
+			// const mappedHand = map(countBy(aCardEntry[0]), (aCount) => aCount);
+			// const handValue = getHandValue(mappedHand);
+
+			//part2:
+
+			const mappedHandPart2 = map(countBy(aCardEntry[0].replace(/J/g, '')), (aCount) => aCount);
+			const handValue = getHandValueWithJokers(
+				mappedHandPart2.sort((a, b) => b - a),
+				countBy(aCardEntry[0])['J'],
+			);
 
 			return {
 				hand,
@@ -63,7 +96,11 @@ function parseData(aData: string): GameHand[] {
 }
 
 export function solveDay7() {
-	let parsedData = parseData(DAY7_DATA_DUMMY);
+	let parsedData = parseData(DAY7_DATA);
+
+	console.log('parsedData: ', parsedData);
+
+	const partTwo = true;
 
 	const mappedHandsValues = parsedData
 		.sort((a, b) => {
@@ -73,7 +110,10 @@ export function solveDay7() {
 				let cardsValueDifference = 0;
 
 				for (let cardIndex = 0; cardIndex < a.hand.length && cardsValueDifference === 0; cardIndex++) {
-					cardsValueDifference = getCardStringScore(a.hand[cardIndex]) - getCardStringScore(b.hand[cardIndex]);
+					//part1:
+					// cardsValueDifference = getCardStringScore(a.hand[cardIndex]) - getCardStringScore(b.hand[cardIndex]);
+					//part2:
+					cardsValueDifference = getCardStringScoreWithJoker(a.hand[cardIndex]) - getCardStringScoreWithJoker(b.hand[cardIndex]);
 				}
 
 				return cardsValueDifference;
@@ -85,5 +125,5 @@ export function solveDay7() {
 			return aSum + aHand.bid * (aIndex + 1);
 		}, 0);
 
-	console.log('part1: ', mappedHandsValues);
+	console.log('part1/2: ', mappedHandsValues);
 }
